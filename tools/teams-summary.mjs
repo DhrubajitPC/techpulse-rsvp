@@ -70,7 +70,7 @@ function eventCell(name, url, tags) {
     type: "TableCell",
     items: [
       { type: "TextBlock", text: `[${name}](${url})`, wrap: true, size: "Small" },
-      { type: "TextBlock", text: `tag: ${tags.join(", ")}`, wrap: true, size: "Small", isSubtle: true, spacing: "None" },
+      { type: "TextBlock", text: `tags: ${tags.join(", ")}`, wrap: true, size: "Small", isSubtle: true, spacing: "None" },
     ],
   };
 }
