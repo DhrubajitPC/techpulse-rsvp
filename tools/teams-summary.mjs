@@ -65,26 +65,12 @@ function dateCell(lines) {
   };
 }
 
-// A "chip" faked with a styled Column, since the real Badge element needs
-// schema 1.6, which this delivery path (Power Automate -> Teams) fails to
-// render at all — 1.5 is the confirmed ceiling, and Column/Container styles
-// are a fixed named palette with no corner-radius control, so this is as
-// close to a soft rounded pill as the schema allows without custom images.
-function chipColumn(tag) {
-  return {
-    type: "Column",
-    width: "auto",
-    style: "emphasis",
-    items: [{ type: "TextBlock", text: tag, size: "Small", wrap: false, spacing: "None" }],
-  };
-}
-
 function eventCell(name, url, tags) {
   return {
     type: "TableCell",
     items: [
       { type: "TextBlock", text: `[${name}](${url})`, wrap: true, size: "Small" },
-      { type: "ColumnSet", spacing: "Small", columns: tags.map(chipColumn) },
+      { type: "TextBlock", text: `tag: ${tags.join(", ")}`, wrap: true, size: "Small", isSubtle: true, spacing: "None" },
     ],
   };
 }
