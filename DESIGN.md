@@ -114,11 +114,12 @@ shared via `tools/events.mjs` — and builds a card with:
 
 - a header row with the TechPulse RSVP icon (`site/icon.png`) and title
 - a summary line with the event count and the page's `data-updated` date
-- an embedded Adaptive Card `Table` listing every event in the month
-  following `data-updated` (a rolling 31-day window, not the full ~8-week
-  digest), one row per event: date (`dd/mm/yyyy`), event name linked to its
-  registration page, format, and tags
-- a "Full digest" link, so anything past the one-month window is still one
+- an embedded Adaptive Card `Table` listing every event in the two weeks
+  following `data-updated` (not the full ~8-week digest), one row per event
+  with two columns: Date (weekday + day/month on the first line, `dd/mm/yyyy`
+  on the second) and Event (the name linked to its registration page, with
+  its tags on a second line)
+- a "Full digest" link, so anything past the two-week window is still one
   click away
 
 The table needs Adaptive Card schema 1.5, which is what the card declares.
@@ -129,7 +130,18 @@ the Power Automate workflow's own bot identity; changing *that* icon is a
 Teams/Power Automate workflow setting, not something this payload controls.
 The "Full digest" link points at that week's own dated archive URL (see
 Publishing above), not root, so old notifications keep linking to the right
-content. It requires two repository secrets that aren't set up by default:
+content.
+
+The Power Automate flow parses the incoming webhook body with a `Parse JSON`
+action before posting the card, against a hand-maintained schema. That schema
+only needs `type` as required on each `body` element — `ColumnSet` and
+`Table` elements don't have a `text` field the way a plain `TextBlock` does,
+so requiring it there rejects the whole payload. If a future card change adds
+a body element shape the schema hasn't seen, regenerate it in the flow's
+`Parse JSON` action from a real sample of `node tools/teams-summary.mjs`'s
+output, keeping `required` down to `type`.
+
+It requires two repository secrets that aren't set up by default:
 
 ```bash
 gh secret set TEAMS_WEBHOOK_URL -R DhrubajitPC/techpulse-rsvp

@@ -10,7 +10,7 @@ const file = process.argv[2] ?? "site/index.html";
 const BASE_URL = "https://dhrubajitpc.github.io/techpulse-rsvp";
 const ICON_URL = `${BASE_URL}/icon.png`;
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
-const WINDOW_DAYS = 31; // "a month" of listed events, from the digest's own updated date
+const WINDOW_DAYS = 14; // two weeks of listed events, from the digest's own updated date
 
 const src = readFileSync(file, "utf8");
 const updated = src.match(/data-updated="([^"]+)"/)?.[1] ?? "unknown date";
@@ -30,6 +30,14 @@ function formatDMY(iso) {
   return `${d}/${m}/${y}`;
 }
 
+const WEEKDAY_FORMAT = new Intl.DateTimeFormat("en-GB", { weekday: "short", timeZone: "UTC" });
+const DAY_MONTH_FORMAT = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
+
+function formatDateLine(iso) {
+  const d = parseISO(iso);
+  return `${WEEKDAY_FORMAT.format(d)}, ${DAY_MONTH_FORMAT.format(d)}`;
+}
+
 const windowStart = parseISO(updated);
 const windowEnd = new Date(windowStart.getTime() + WINDOW_DAYS * ONE_DAY_MS);
 
@@ -39,10 +47,21 @@ const events = allEvents.filter((e) => {
   return d >= windowStart && d <= windowEnd;
 });
 
-function cell(text, header = false) {
+function headerCell(text) {
+  return { type: "TableCell", items: [{ type: "TextBlock", text, wrap: true, size: "Small", weight: "Bolder" }] };
+}
+
+function cell(lines) {
   return {
     type: "TableCell",
-    items: [{ type: "TextBlock", text, wrap: true, size: "Small", weight: header ? "Bolder" : "Default" }],
+    items: lines.map((text, i) => ({
+      type: "TextBlock",
+      text,
+      wrap: true,
+      size: "Small",
+      isSubtle: i > 0,
+      ...(i > 0 ? { spacing: "None" } : {}),
+    })),
   };
 }
 
@@ -54,15 +73,13 @@ const table = {
   type: "Table",
   firstRowAsHeaders: true,
   gridStyle: "default",
-  columns: [{ width: 1 }, { width: 3 }, { width: 1 }, { width: 2 }],
+  columns: [{ width: 1 }, { width: 3 }],
   rows: [
-    row([cell("Date", true), cell("Event", true), cell("Format", true), cell("Tags", true)]),
+    row([headerCell("Date"), headerCell("Event")]),
     ...events.map((e) =>
       row([
-        cell(formatDMY(e.date)),
-        cell(`[${e.name}](${e.url})`),
-        cell(e.format),
-        cell(e.tags.join(", ")),
+        cell([formatDateLine(e.date), formatDMY(e.date)]),
+        cell([`[${e.name}](${e.url})`, `tag: ${e.tags.join(", ")}`]),
       ])
     ),
   ],
@@ -70,8 +87,8 @@ const table = {
 
 const summaryText =
   events.length > 0
-    ? `${events.length} event${events.length === 1 ? "" : "s"} in the next month — updated ${formatDMY(updated)}`
-    : `No events in the next month — updated ${formatDMY(updated)}. See the full digest for what's further out.`;
+    ? `${events.length} event${events.length === 1 ? "" : "s"} in the next two weeks — updated ${formatDMY(updated)}`
+    : `No events in the next two weeks — updated ${formatDMY(updated)}. See the full digest for what's further out.`;
 
 const card = {
   type: "AdaptiveCard",
