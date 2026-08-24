@@ -51,7 +51,7 @@ function headerCell(text) {
   return { type: "TableCell", items: [{ type: "TextBlock", text, wrap: true, size: "Small", weight: "Bolder" }] };
 }
 
-function cell(lines) {
+function dateCell(lines) {
   return {
     type: "TableCell",
     items: lines.map((text, i) => ({
@@ -62,6 +62,28 @@ function cell(lines) {
       isSubtle: i > 0,
       ...(i > 0 ? { spacing: "None" } : {}),
     })),
+  };
+}
+
+// A "chip" faked with a colored Container, since the real Badge element
+// needs schema 1.6, which this delivery path (Power Automate -> Teams)
+// fails to render at all — 1.5 is the confirmed ceiling.
+function chip(tag) {
+  return {
+    type: "Container",
+    style: "accent",
+    spacing: "None",
+    items: [{ type: "TextBlock", text: tag, size: "Small", weight: "Bolder", wrap: false, spacing: "None" }],
+  };
+}
+
+function eventCell(name, url, tags) {
+  return {
+    type: "TableCell",
+    items: [
+      { type: "TextBlock", text: `[${name}](${url})`, wrap: true, size: "Small" },
+      { type: "ColumnSet", spacing: "Small", columns: tags.map((t) => ({ type: "Column", width: "auto", items: [chip(t)] })) },
+    ],
   };
 }
 
@@ -78,8 +100,8 @@ const table = {
     row([headerCell("Date"), headerCell("Event")]),
     ...events.map((e) =>
       row([
-        cell([formatDateLine(e.date), formatDMY(e.date)]),
-        cell([`[${e.name}](${e.url})`, `tag: ${e.tags.join(", ")}`]),
+        dateCell([formatDateLine(e.date), formatDMY(e.date)]),
+        eventCell(e.name, e.url, e.tags),
       ])
     ),
   ],
