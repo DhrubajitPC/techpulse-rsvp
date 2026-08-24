@@ -65,15 +65,17 @@ function dateCell(lines) {
   };
 }
 
-// A "chip" faked with a colored Container, since the real Badge element
-// needs schema 1.6, which this delivery path (Power Automate -> Teams)
-// fails to render at all — 1.5 is the confirmed ceiling.
-function chip(tag) {
+// A "chip" faked with a styled Column, since the real Badge element needs
+// schema 1.6, which this delivery path (Power Automate -> Teams) fails to
+// render at all — 1.5 is the confirmed ceiling, and Column/Container styles
+// are a fixed named palette with no corner-radius control, so this is as
+// close to a soft rounded pill as the schema allows without custom images.
+function chipColumn(tag) {
   return {
-    type: "Container",
-    style: "accent",
-    spacing: "None",
-    items: [{ type: "TextBlock", text: tag, size: "Small", weight: "Bolder", wrap: false, spacing: "None" }],
+    type: "Column",
+    width: "auto",
+    style: "emphasis",
+    items: [{ type: "TextBlock", text: tag, size: "Small", wrap: false, spacing: "None" }],
   };
 }
 
@@ -82,7 +84,7 @@ function eventCell(name, url, tags) {
     type: "TableCell",
     items: [
       { type: "TextBlock", text: `[${name}](${url})`, wrap: true, size: "Small" },
-      { type: "ColumnSet", spacing: "Small", columns: tags.map((t) => ({ type: "Column", width: "auto", items: [chip(t)] })) },
+      { type: "ColumnSet", spacing: "Small", columns: tags.map(chipColumn) },
     ],
   };
 }
