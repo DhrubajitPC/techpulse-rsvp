@@ -51,7 +51,7 @@ function headerCell(text) {
   return { type: "TableCell", items: [{ type: "TextBlock", text, wrap: true, size: "Small", weight: "Bolder" }] };
 }
 
-function cell(lines) {
+function dateCell(lines) {
   return {
     type: "TableCell",
     items: lines.map((text, i) => ({
@@ -62,6 +62,20 @@ function cell(lines) {
       isSubtle: i > 0,
       ...(i > 0 ? { spacing: "None" } : {}),
     })),
+  };
+}
+
+function badge(tag) {
+  return { type: "Badge", text: tag, style: "Accent", appearance: "Tint", shape: "Rounded", size: "Small" };
+}
+
+function eventCell(name, url, tags) {
+  return {
+    type: "TableCell",
+    items: [
+      { type: "TextBlock", text: `[${name}](${url})`, wrap: true, size: "Small" },
+      { type: "ColumnSet", spacing: "Small", columns: tags.map((t) => ({ type: "Column", width: "auto", items: [badge(t)] })) },
+    ],
   };
 }
 
@@ -78,8 +92,8 @@ const table = {
     row([headerCell("Date"), headerCell("Event")]),
     ...events.map((e) =>
       row([
-        cell([formatDateLine(e.date), formatDMY(e.date)]),
-        cell([`[${e.name}](${e.url})`, `tag: ${e.tags.join(", ")}`]),
+        dateCell([formatDateLine(e.date), formatDMY(e.date)]),
+        eventCell(e.name, e.url, e.tags),
       ])
     ),
   ],
@@ -93,7 +107,7 @@ const summaryText =
 const card = {
   type: "AdaptiveCard",
   $schema: "http://adaptivecards.io/schemas/adaptive-card.json",
-  version: "1.5",
+  version: "1.6",
   body: [
     {
       type: "ColumnSet",
