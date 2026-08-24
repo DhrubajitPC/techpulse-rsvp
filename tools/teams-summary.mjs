@@ -111,6 +111,7 @@ const card = {
     ...(events.length > 0 ? [table] : []),
     { type: "TextBlock", text: `[Full digest](${pageUrl})`, wrap: true, spacing: "Medium" },
   ],
+  msteams: { width: "full" }, // use the channel's full width instead of Teams' default narrow card
 };
 
 process.stdout.write(JSON.stringify({
