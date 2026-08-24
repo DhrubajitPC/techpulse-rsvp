@@ -37,6 +37,13 @@ content is substantial. Also exclude paid vendor training courses.
    - https://www.developer.tech.gov.sg/communities/events/ — STACK conference and meetups
    - https://ocgroups.dev/cncf/group/v58wadq — Cloud Native Singapore (CNCF moved its
      community platform off community.cncf.io; that old URL now redirects here)
+   - https://asiadevopsconferences.com/ — Asia DevOps Conferences; by-invitation-only
+     events across Malaysia, Singapore, Vietnam and Indonesia, so check for the
+     Singapore-specific edition and its own registration/details page
+   - https://www.insurtechinsights.com/ — Insurtech Insights; only include a session if
+     it is Singapore-based (or online at a workable SGT time) and its content is
+     substantially technical (AI, data, engineering), not general insurance-industry
+     business content — its Asia edition has run in Hong Kong, which is out of scope
    - Eventbrite category pages for Singapore:
      https://www.eventbrite.com/d/singapore--singapore/tech/,
      https://www.eventbrite.com/d/singapore--singapore/software-engineering/,
