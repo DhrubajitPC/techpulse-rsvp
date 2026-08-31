@@ -64,6 +64,8 @@ content is substantial. Also exclude paid vendor training courses.
      Women Devs SG (women-devs-sg),
      STACK Community Powered by GovTech Singapore (stack-by-govtech-singapore),
      Tech Talks by Thoughtworks (ThoughtWorks-Talks-Tech)
+   - https://www.commudle.com/ — search for Singapore tech communities and events
+     (use the search or browse by location/tag to find Singapore-based groups)
    - Also run one or two fresh web searches such as
      "Singapore tech meetup <current month> <year>", "Singapore AI meetup <month>",
      "Singapore developer conference <year>" to catch anything the aggregators miss.
