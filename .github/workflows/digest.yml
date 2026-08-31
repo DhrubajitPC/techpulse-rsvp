@@ -2,8 +2,15 @@ name: Weekly digest
 
 on:
   schedule:
-    # Monday 01:00 UTC = Monday 09:00 SGT
-    - cron: "0 1 * * 1"
+    # Monday 01:17 UTC = Monday 09:17 SGT. Off the top of the hour on
+    # purpose — GitHub's own docs warn that round times (especially
+    # 0 minutes past the hour) see the heaviest scheduler load and are
+    # the most likely to be delayed or dropped entirely.
+    - cron: "17 1 * * 1"
+    # Tuesday safety net, same offset one day later. The `gate` job below
+    # only lets this one actually do anything if the page is still stale,
+    # i.e. Monday's cron never fired or its run failed validation.
+    - cron: "17 1 * * 2"
   workflow_dispatch:
     inputs:
       skip_refresh:
@@ -16,10 +23,40 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  gate:
+    # Cheap, always-runs check that decides whether the rest of the workflow
+    # should do anything. For every trigger except the Tuesday safety-net
+    # cron, it always says yes. For the Tuesday cron specifically, it only
+    # says yes if the page is still showing a stale date — i.e. Monday's
+    # cron didn't fire, or fired and failed — so a healthy week stays fully
+    # silent instead of redeploying and re-notifying for nothing.
+    runs-on: ubuntu-latest
+    outputs:
+      proceed: ${{ steps.check.outputs.proceed }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: check
+        run: |
+          if [ "${{ github.event.schedule }}" != "17 1 * * 2" ]; then
+            echo "proceed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          UPDATED=$(grep -o 'data-updated="[^"]*"' site/index.html | head -1 | cut -d'"' -f2)
+          TODAY=$(TZ=Asia/Singapore date +%Y-%m-%d)
+          YESTERDAY=$(TZ=Asia/Singapore date -d yesterday +%Y-%m-%d)
+          if [ "$UPDATED" = "$TODAY" ] || [ "$UPDATED" = "$YESTERDAY" ]; then
+            echo "Page already fresh (data-updated=$UPDATED) — Monday's scheduled run succeeded. Safety-net run has nothing to do." >> "$GITHUB_STEP_SUMMARY"
+            echo "proceed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Page is stale (data-updated=$UPDATED) — Monday's scheduled run appears to have not fired or not succeeded. Running the safety-net refresh." >> "$GITHUB_STEP_SUMMARY"
+            echo "proceed=true" >> "$GITHUB_OUTPUT"
+          fi
+
   refresh:
+    needs: gate
     # Skipped when dispatched with skip_refresh, which republishes the committed
-    # page as-is. Scheduled runs always regenerate.
-    if: ${{ !inputs.skip_refresh }}
+    # page as-is, or when the gate decided there's nothing to do.
+    if: ${{ !inputs.skip_refresh && needs.gate.outputs.proceed == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
@@ -87,10 +124,12 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
   deploy:
-    needs: refresh
-    # Publish when the refresh succeeded, or when it was deliberately skipped.
-    # A failed generation must not reach Pages — the previous page stays live.
-    if: ${{ always() && (needs.refresh.result == 'success' || needs.refresh.result == 'skipped') }}
+    needs: [gate, refresh]
+    # Publish when the refresh succeeded, or when it was deliberately skipped
+    # (skip_refresh dispatch) — but not when the gate skipped everything
+    # because there was nothing to do. A failed generation must not reach
+    # Pages either — the previous page stays live.
+    if: ${{ always() && needs.gate.outputs.proceed == 'true' && (needs.refresh.result == 'success' || needs.refresh.result == 'skipped') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -112,7 +151,11 @@ jobs:
         uses: actions/deploy-pages@v5
 
   notify-teams:
-    needs: [deploy]
+    needs: [gate, deploy]
+    # Adding this condition at all drops the implicit "needs must have
+    # succeeded" default, so success() is spelled out explicitly here —
+    # otherwise this could fire even if deploy failed.
+    if: ${{ success() && needs.gate.outputs.proceed == 'true' }}
     runs-on: ubuntu-latest
     steps:
       # Check out the commit deploy just published, not the stale ref.

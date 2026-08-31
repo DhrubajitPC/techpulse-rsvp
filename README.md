@@ -7,7 +7,8 @@ software engineering, frontend, backend, cloud and data.
 always shows the latest digest. Each past week stays reachable at its own
 dated URL, e.g. `https://dhrubajitpc.github.io/techpulse-rsvp/2026-08-17/`.
 
-Rebuilt every Monday morning (09:00 SGT) by a scheduled GitHub Actions job.
+Rebuilt every Monday morning (~09:17 SGT) by a scheduled GitHub Actions job,
+with a Tuesday safety-net run that only kicks in if Monday's didn't happen.
 Copilot CLI researches the listings and rewrites the page; a validator decides
 whether the result is publishable. If a run produces something broken, nothing is
 committed and the previous week's page stays live.

@@ -25,9 +25,22 @@ that week's page frozen in place.
 
 ## The weekly run
 
-`cron: "0 1 * * 1"` — Monday 01:00 UTC, which is Monday 09:00 SGT. GitHub delays
-scheduled runs under load, so treat the time as approximate. `workflow_dispatch`
-is enabled for manual runs.
+`cron: "17 1 * * 1"` — Monday 01:17 UTC, which is Monday 09:17 SGT.
+Deliberately not the top of the hour: GitHub's scheduler sees the heaviest
+load at round times, and can delay or even silently drop a scheduled run
+under enough load — which is exactly what happened to this workflow's cron
+in practice before this offset was added. `workflow_dispatch` is enabled for
+manual runs.
+
+There's also a second cron, `"17 1 * * 2"` (Tuesday, same offset), as a
+safety net for exactly that failure mode. The `gate` job runs first on every
+trigger; for any trigger except that specific Tuesday cron it always says
+proceed, but for the Tuesday cron it checks the live page's `data-updated`
+stamp and only proceeds if it's *not* from the last day or two — i.e. Monday's
+run either never fired or fired and failed. If Monday already succeeded, the
+Tuesday run's `gate` step says no and every other job (`refresh`, `deploy`,
+`notify-teams`) is skipped, so a healthy week produces no visible effect at
+all — no redeploy, no duplicate Teams message.
 
 The `refresh` job installs Copilot CLI and runs it with `PROMPT.md` as the
 prompt, explicitly requesting `claude-opus-5`. Copilot researches the sources listed there, rewrites `EVENTS`, updates
@@ -44,9 +57,11 @@ overwritten every week, so the root URL always serves the latest digest while
 every past week stays reachable at its own dated URL.
 
 `deploy` runs when `refresh` succeeded *or* was skipped, and never when it
-failed. The skipped case is the `skip_refresh` dispatch input, which republishes
-whatever is committed without spending a Copilot run — useful after editing the
-page by hand, or to get a first deploy out before the secret exists:
+failed — and, per the `gate` job above, never when there was nothing to do
+either. The skipped case is the `skip_refresh` dispatch input, which
+republishes whatever is committed without spending a Copilot run — useful
+after editing the page by hand, or to get a first deploy out before the
+secret exists:
 
 ```bash
 gh workflow run digest.yml -R DhrubajitPC/techpulse-rsvp -f skip_refresh=true
