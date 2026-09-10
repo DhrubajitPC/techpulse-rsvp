@@ -66,6 +66,11 @@ content is substantial. Also exclude paid vendor training courses.
      Tech Talks by Thoughtworks (ThoughtWorks-Talks-Tech)
    - https://www.commudle.com/ — search for Singapore tech communities and events
      (use the search or browse by location/tag to find Singapore-based groups)
+   - https://luma.com/devops-singapore — check the DevOps Singapore community page
+     and include upcoming technical events
+   - https://luma.com/ — search Luma broadly for Singapore tech events
+   - https://luma.com/singapore and https://luma.com/discover/singapore/ai —
+     check Luma's Singapore discovery pages for additional tech events
    - Also run one or two fresh web searches such as
      "Singapore tech meetup <current month> <year>", "Singapore AI meetup <month>",
      "Singapore developer conference <year>" to catch anything the aggregators miss.
