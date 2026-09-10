@@ -69,8 +69,8 @@ content is substantial. Also exclude paid vendor training courses.
    - https://luma.com/devops-singapore — check the DevOps Singapore community page
      and include upcoming technical events
    - https://luma.com/ — search Luma broadly for Singapore tech events
-   - https://luma.com/singapore and https://luma.com/discover/singapore/ai —
-     check Luma's Singapore discovery pages for additional tech events
+   - https://luma.com/singapore — check Luma's Singapore discovery page for
+     additional tech events, but only include clearly technical events
    - Also run one or two fresh web searches such as
      "Singapore tech meetup <current month> <year>", "Singapore AI meetup <month>",
      "Singapore developer conference <year>" to catch anything the aggregators miss.
