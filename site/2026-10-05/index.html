@@ -1,0 +1,842 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TechPulse RSVP</title>
+<meta name="description" content="TechPulse RSVP — a weekly digest of technology meetups and conferences in Singapore: AI, software engineering, frontend, backend, cloud and data.">
+<link rel="icon" type="image/png" href="/techpulse-rsvp/icon.png">
+<style>
+  :root {
+    --bg: #fbfaf8;
+    --surface: #ffffff;
+    --border: #e4e0d9;
+    --border-strong: #cfc9bf;
+    --ink: #1c1b19;
+    --ink-soft: #55514b;
+    --ink-faint: #8a847b;
+    --accent: #9a3412;
+    --accent-soft: #fdf1e7;
+    --chip-on: #1c1b19;
+    --chip-on-ink: #fbfaf8;
+    --shadow: 0 1px 2px rgba(28, 27, 25, .05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #16151a;
+      --surface: #1e1d23;
+      --border: #302e37;
+      --border-strong: #423f4b;
+      --ink: #eceaf0;
+      --ink-soft: #a9a5b3;
+      --ink-faint: #7b7787;
+      --accent: #f0a882;
+      --accent-soft: #2b2128;
+      --chip-on: #eceaf0;
+      --chip-on-ink: #16151a;
+      --shadow: none;
+    }
+  }
+  /* Explicit override (from the toggle) wins regardless of system scheme. */
+  :root[data-theme="dark"] {
+    --bg: #16151a;
+    --surface: #1e1d23;
+    --border: #302e37;
+    --border-strong: #423f4b;
+    --ink: #eceaf0;
+    --ink-soft: #a9a5b3;
+    --ink-faint: #7b7787;
+    --accent: #f0a882;
+    --accent-soft: #2b2128;
+    --chip-on: #eceaf0;
+    --chip-on-ink: #16151a;
+    --shadow: none;
+  }
+
+  * { box-sizing: border-box; }
+  @media (prefers-reduced-motion: no-preference) {
+    *, *::before, *::after {
+      transition: background-color .25s ease, color .25s ease, border-color .25s ease;
+    }
+  }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.6 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 0 20px 72px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+
+  header { padding: 56px 0 8px; }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+  h1 {
+    margin: 0 0 10px;
+    font-size: clamp(28px, 6vw, 38px);
+    line-height: 1.15;
+    letter-spacing: -.02em;
+  }
+  .sub { margin: 0; color: var(--ink-soft); font-size: 15px; }
+  .sub b { color: var(--ink); font-weight: 600; }
+
+  .theme-toggle {
+    position: relative;
+    flex: none;
+    width: 36px; height: 36px;
+    margin-top: 4px;
+    appearance: none;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .theme-toggle:hover { border-color: var(--ink-faint); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .theme-toggle svg {
+    position: absolute; inset: 0; margin: auto;
+    width: 18px; height: 18px;
+    color: var(--ink-soft);
+  }
+  .theme-toggle .icon-moon { opacity: 0; }
+  .theme-toggle[data-active="dark"] .icon-sun { opacity: 0; }
+  .theme-toggle[data-active="dark"] .icon-moon { opacity: 1; }
+  @media (prefers-reduced-motion: no-preference) {
+    .theme-toggle svg { transition: opacity .3s ease, transform .4s ease; }
+    .theme-toggle .icon-sun { transform: rotate(0deg) scale(1); }
+    .theme-toggle .icon-moon { transform: rotate(-90deg) scale(.6); }
+    .theme-toggle[data-active="dark"] .icon-sun { transform: rotate(90deg) scale(.6); }
+    .theme-toggle[data-active="dark"] .icon-moon { transform: rotate(0deg) scale(1); }
+  }
+
+  .controls {
+    position: sticky; top: 0; z-index: 5;
+    background: var(--bg);
+    padding: 20px 0 14px;
+    margin: 20px 0 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .row { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+  .row + .row { margin-top: 9px; }
+  .row-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: .09em;
+    color: var(--ink-faint); font-weight: 600;
+    width: 100%;
+  }
+  @media (min-width: 560px) { .row-label { width: 52px; } }
+
+  .chip {
+    appearance: none;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--ink-soft);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font: inherit; font-size: 13.5px;
+    cursor: pointer;
+    transition: background .12s, color .12s, border-color .12s;
+  }
+  .chip:hover { border-color: var(--ink-faint); color: var(--ink); }
+  .chip[aria-pressed="true"] {
+    background: var(--chip-on);
+    border-color: var(--chip-on);
+    color: var(--chip-on-ink);
+  }
+  .chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .count { margin: 16px 0 0; font-size: 13.5px; color: var(--ink-faint); }
+
+  h2.month {
+    margin: 34px 0 12px;
+    font-size: 12px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .11em;
+    color: var(--ink-faint);
+  }
+
+  .event {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+  }
+  .event-top { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
+  .date {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700; font-size: 13px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: 5px;
+    padding: 2px 7px;
+    white-space: nowrap;
+  }
+  .event h3 { margin: 0; font-size: 17px; line-height: 1.3; font-weight: 600; flex: 1 1 240px; }
+  .event h3 a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--border-strong); }
+  .event h3 a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .meta { margin: 8px 0 0; font-size: 13.5px; color: var(--ink-faint); }
+  .meta .fmt { color: var(--ink-soft); font-weight: 600; }
+  .desc { margin: 9px 0 0; font-size: 14.5px; color: var(--ink-soft); }
+  .tags { margin: 11px 0 0; display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag {
+    font-size: 11.5px; letter-spacing: .02em;
+    color: var(--ink-faint);
+    border: 1px solid var(--border);
+    border-radius: 4px; padding: 2px 6px;
+  }
+
+  .empty { padding: 28px 0; color: var(--ink-faint); font-size: 15px; }
+
+  .groups-section { margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--border); }
+  .groups-section h2 { margin: 0 0 6px; font-size: 20px; letter-spacing: -.01em; }
+  .groups-section p { margin: 0 0 18px; color: var(--ink-soft); font-size: 14.5px; }
+  .grid { display: grid; gap: 8px; grid-template-columns: 1fr; }
+  @media (min-width: 620px) { .grid { grid-template-columns: 1fr 1fr; } }
+  .group {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    text-decoration: none;
+  }
+  .group:hover { border-color: var(--ink-faint); }
+  .group b { display: block; color: var(--ink); font-size: 14.5px; font-weight: 600; }
+  .group span { display: block; margin-top: 2px; color: var(--ink-faint); font-size: 12.5px; }
+
+  footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--ink-faint); font-size: 13px; }
+  footer a { color: var(--ink-soft); }
+  footer p { margin: 0 0 8px; }
+</style>
+<script>
+  // Apply any saved theme choice before first paint, so there's no flash of
+  // the wrong theme. The toggle button's own JS lives with the rest of the
+  // page script, near the end of <body>.
+  (function () {
+    var saved = localStorage.getItem("theme");
+    if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved;
+  })();
+</script>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="header-top">
+    <h1>TechPulse RSVP</h1>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark theme" aria-pressed="false">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+      </svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"></path>
+      </svg>
+    </button>
+  </div>
+  <p class="sub">
+    Meetups and conferences for AI, software engineering, frontend, backend, cloud and data —
+    in Singapore or joinable from SGT. Last updated
+    <b><span id="updated" data-updated="2026-10-05">5 October 2026</span></b>.
+    Covers the next eight weeks, plus larger conferences later in the year.
+  </p>
+</header>
+
+<div class="controls">
+  <div class="row" id="topics"><span class="row-label">Topic</span></div>
+  <div class="row" id="formats"><span class="row-label">Format</span></div>
+</div>
+
+<p class="count" id="count"></p>
+<main id="list"></main>
+
+<section class="groups-section">
+  <h2>Communities worth following</h2>
+  <p>Most Singapore meetups announce late. These groups are where the next batch shows up first.</p>
+  <div class="grid" id="groups"></div>
+</section>
+
+<section class="groups-section">
+  <h2>Sources</h2>
+  <p>
+    Every run checks
+    <a href="https://techmeetups.io/singapore">techmeetups.io</a>,
+    <a href="https://dev.events/meetups/AS/SG/Singapore">dev.events</a>,
+    <a href="https://singapore.aitinkerers.org/">AI Tinkerers Singapore</a>,
+    <a href="https://globalai.community/chapters/singapore">Global AI Singapore</a>,
+    <a href="https://www.sginnovate.com/events">SGInnovate</a>,
+    <a href="https://www.developer.tech.gov.sg/communities/events/">the Singapore Gov Developer Portal</a>,
+    <a href="https://ocgroups.dev/cncf/group/v58wadq">Cloud Native Singapore</a>,
+    <a href="https://asiadevopsconferences.com/">Asia DevOps Conferences</a>,
+    <a href="https://www.insurtechinsights.com/">Insurtech Insights</a>,
+    <a href="https://www.commudle.com/">Commudle</a>,
+    <a href="https://luma.com/">Luma</a>,
+    <a href="https://luma.com/devops-singapore">Luma DevOps Singapore</a>,
+    and Luma's Singapore discovery page at
+    <a href="https://luma.com/singapore">luma.com/singapore</a>, Eventbrite's
+    <a href="https://www.eventbrite.com/d/singapore--singapore/tech/">tech</a>,
+    <a href="https://www.eventbrite.com/d/singapore--singapore/software-engineering/">software engineering</a>
+    and
+    <a href="https://www.eventbrite.sg/d/singapore--singapore/artificial-intelligence/">AI</a>
+    category pages for Singapore, the <a href="https://www.meetup.com/">Meetup</a> page for every
+    community listed above, and a couple of fresh web searches to catch anything the aggregators miss.
+  </p>
+</section>
+
+<footer>
+  <p>Rebuilt every Monday morning by a scheduled GitHub Actions job — see Sources above for what it checks.</p>
+  <p>Every event here was checked against the organiser's own page. Anything unverifiable was left out.</p>
+</footer>
+
+</div>
+
+<script>
+const EVENTS = [
+  {
+    date: "2026-10-06",
+    display: "Oct 6",
+    name: "Ai42 Singapore 2026: Compute The Future",
+    venue: "Suntec Singapore Convention & Exhibition Centre",
+    time: "From 9:00 AM SGT",
+    format: "In person",
+    description: "One day of twelve technical sessions and two panels on production-grade AI, decentralised infrastructure and physical robotics, run during TOKEN2049 week.",
+    tags: ["AI", "Backend/Cloud"],
+    url: "https://ai42.sg/"
+  },
+  {
+    date: "2026-10-06",
+    display: "Oct 6",
+    name: "Trace. Eval. Ship: Running AI Agents in Production",
+    venue: "PayPal Singapore, Suntec Tower Five, 5 Temasek Boulevard",
+    time: "6:00 PM SGT",
+    format: "In person",
+    description: "ClickHouse and Women in Tech SG on end-to-end agent tracing, eval pipelines built from production traces, and the storage layer behind billions of spans.",
+    tags: ["AI", "Data", "Backend/Cloud"],
+    url: "https://www.meetup.com/clickhouse-singapore-meetup-group/events/316468135/"
+  },
+  {
+    date: "2026-10-06",
+    display: "Oct 6",
+    name: "Lorong AI After Dark: AI x Consumer Hardware",
+    venue: "Lorong AI, one-north, 69 Ayer Rajah Crescent",
+    time: "6:30–9:00 PM SGT",
+    format: "In person",
+    description: "Jackie Tan of The Mind Interface Company on moving from software to shipping AI-enabled consumer hardware, with a device show-and-tell.",
+    tags: ["AI", "Software Engineering"],
+    url: "https://luma.com/9jxhxdrk"
+  },
+  {
+    date: "2026-10-07",
+    display: "Oct 7",
+    name: "KSUG.AI APAC: AI Engineering — Agents, Harness & Production",
+    venue: "Online",
+    time: "3:00 PM SGT",
+    format: "Online",
+    description: "Three talks on agent governance, agent loops and context management, evals and MCP, and securing autonomous infrastructure.",
+    tags: ["AI", "Backend/Cloud"],
+    url: "https://www.meetup.com/ksug-sg/events/316833722/"
+  },
+  {
+    date: "2026-10-07",
+    display: "Oct 7",
+    name: "AI Wednesdays: The One About Embeddings & Speech AI",
+    venue: "Lorong AI, one-north, 69 Ayer Rajah Crescent",
+    time: "3:00 PM SGT",
+    format: "In person",
+    description: "AI Singapore on SEA-BED and the SEA-LION embedding models, HTX on adapting a 5B spoken language model to Singapore, and KLASS on zero-shot TTS for Singapore English.",
+    tags: ["AI", "Data"],
+    url: "https://luma.com/ifm5q6y5"
+  },
+  {
+    date: "2026-10-07",
+    display: "Oct 7",
+    name: "WDS x HTX x OGP: AI & Data in Practice",
+    venue: "Open Government Products, 51 Bras Basah Road, #04-08 Lazada One",
+    time: "6:30–9:00 PM SGT",
+    format: "In person",
+    description: "An HTX AI engineer on taking a RAG and agent-orchestration platform to production, followed by a workshop on interrogating AI-generated analysis.",
+    tags: ["AI", "Data"],
+    url: "https://www.meetup.com/women-devs-sg/events/316734445/"
+  },
+  {
+    date: "2026-10-07",
+    display: "Oct 7",
+    name: "PL & Compilers Meetup",
+    venue: "The Coffee Bean & Tea Leaf, International Plaza, 10 Anson Road",
+    time: "7:30 PM SGT",
+    format: "In person",
+    description: "Fortnightly informal session on language design, static analysis, VMs and code generation; the topic is picked by whoever turns up.",
+    tags: ["Software Engineering"],
+    url: "https://www.meetup.com/singapore-compiler-engineering-group/events/316594399/"
+  },
+  {
+    date: "2026-10-10",
+    display: "Oct 10",
+    name: "AI Tinkerers Singapore: Saturday Demo Meetup",
+    venue: "Singapore (venue shared with accepted attendees)",
+    time: "Afternoon SGT",
+    format: "In person",
+    description: "Live demos of working AI systems from local builders — agents, RAG, evals — with technical Q&A; AI Tinkerers founder Joe Heitzeberg attends.",
+    tags: ["AI", "Software Engineering"],
+    url: "https://singapore.aitinkerers.org/p/ai-tinkerers-singapore-saturday-demo-meetup-with-joe-heitzeberg-oct-10"
+  },
+  {
+    date: "2026-10-13",
+    display: "Oct 13",
+    name: "Claude Meetup #11 Singapore",
+    venue: "Singapore (address shared on registration)",
+    time: "6:00–9:00 PM SGT",
+    format: "In person",
+    description: "Community meetup marking Anthropic's Singapore office opening, with presentations from the local team and selected community demos of projects built on Claude.",
+    tags: ["AI", "Software Engineering"],
+    url: "https://luma.com/claude-envo"
+  },
+  {
+    date: "2026-10-14",
+    display: "Oct 14",
+    name: "AI Wednesdays: The One About AI x SWE",
+    venue: "Lorong AI, one-north, 69 Ayer Rajah Crescent",
+    time: "3:00 PM SGT",
+    format: "In person",
+    description: "GovTech's Alex Chng on building developer tooling for agentic workflows — architecture, multiple models, and the trade-off between developer experience and control.",
+    tags: ["Software Engineering", "AI"],
+    url: "https://luma.com/npubhgx0"
+  },
+  {
+    date: "2026-10-14",
+    display: "Oct 14",
+    name: "Tinker Time: Building Production-Ready AI Agents",
+    venue: "Lorong AI, one-north, 69 Ayer Rajah Crescent",
+    time: "6:00–9:00 PM SGT",
+    format: "In person",
+    description: "Hands-on workshop with Bitdeer AI: deploy an agent to a live endpoint, load-test it, then add tracing, retries and evals; Python and API experience required.",
+    tags: ["AI", "Backend/Cloud", "Software Engineering"],
+    url: "https://luma.com/vc4r6276"
+  },
+  {
+    date: "2026-10-15",
+    display: "Oct 15",
+    name: "Lorong AI After Dark: How Data & AI Gets Put to Work",
+    venue: "Lorong AI, one-north, 69 Ayer Rajah Crescent",
+    time: "6:00–8:30 PM SGT",
+    format: "In person",
+    description: "Dataiku User Community session with MSD on its SCM Wizard and Aramco Trading Singapore on their Cobuild build, plus a look at Dataiku Headless.",
+    tags: ["Data", "AI"],
+    url: "https://luma.com/96t08mkk"
+  },
+  {
+    date: "2026-10-16",
+    display: "Oct 16",
+    name: "ThursTalks: What Happens When AI Runs the Robotics Experiments?",
+    venue: "Lorong AI, one-north, 69 Ayer Rajah Crescent",
+    time: "3:00–5:00 PM SGT",
+    format: "In person",
+    description: "Menlo Research on an agent that autonomously runs reinforcement-learning loops for humanoid locomotion — reward ablation, architecture sweeps and LSTM policies in Isaac Lab.",
+    tags: ["AI"],
+    url: "https://luma.com/4fx8j6ju"
+  },
+  {
+    date: "2026-10-17",
+    display: "Oct 17",
+    name: "JuniorDevSG Developer's Gym: LeetCode Practice Session",
+    venue: "HackerspaceSG, Textile Centre, 200 Jalan Sultan",
+    time: "2:00 PM SGT",
+    format: "In person",
+    description: "A volunteer attempts a LeetCode problem in 40 minutes while the group role-plays interviewer and collaborator, then gives feedback.",
+    tags: ["Software Engineering"],
+    url: "https://www.meetup.com/junior-developers-singapore/events/316126433/"
+  },
+  {
+    date: "2026-10-21",
+    display: "Oct 21",
+    name: "KSUG.AI Singapore #49: Cloud Native & AI Meetup",
+    venue: "IMDA, 10 Pasir Panjang Road, Mapletree Business City",
+    time: "6:00 PM SGT",
+    format: "In person",
+    description: "Elastic on jina-ocr-v1 document parsing on low-budget GPUs, and Bosch Digital on OpenCost in Kubernetes for metering AI services; Zoom stream available.",
+    tags: ["Backend/Cloud", "AI"],
+    url: "https://www.meetup.com/ksug-sg/events/316384465/"
+  },
+  {
+    date: "2026-10-21",
+    display: "Oct 21",
+    name: "PL & Compilers Meetup",
+    venue: "The Coffee Bean & Tea Leaf, International Plaza, 10 Anson Road",
+    time: "7:30 PM SGT",
+    format: "In person",
+    description: "Fortnightly programming-languages and compilers session covering language design, static analysis and low-level systems.",
+    tags: ["Software Engineering"],
+    url: "https://www.meetup.com/singapore-compiler-engineering-group/events/vpztztyjcnbcc/"
+  },
+  {
+    date: "2026-10-22",
+    display: "Oct 22",
+    name: "Hacktoberfest Meetup Singapore",
+    venue: "Zenika Singapore, 20 Bendemeer Road, #03-10 BS Bendemeer Centre",
+    time: "7:00 PM SGT",
+    format: "In person",
+    description: "Two talks on making a first open-source contribution and on the engineering behind maintaining a project past the first PR, followed by an open space.",
+    tags: ["Software Engineering"],
+    url: "https://www.meetup.com/junior-developers-singapore/events/316633543/"
+  },
+  {
+    date: "2026-10-26",
+    display: "Oct 26",
+    name: "ROSCon Singapore 2026",
+    venue: "Lorong AI, one-north, 69 Ayer Rajah Crescent",
+    time: "9:00 AM–5:00 PM SGT",
+    format: "In person",
+    description: "Open-source robotics conference focused on deployment rather than demos: Open-RMF, multi-robot coordination, healthcare fleet case studies and embodied AI.",
+    tags: ["AI", "Software Engineering"],
+    url: "https://luma.com/nfyo3o3m"
+  },
+  {
+    date: "2026-10-27",
+    display: "Oct 27–28",
+    name: "ContainerDays & AI Context Singapore 2026",
+    venue: "Suntec Singapore Convention & Exhibition Centre, 1 Raffles Boulevard",
+    time: "From 9:00 AM SGT",
+    format: "In person",
+    description: "Two days on production Kubernetes, platform engineering and AI infrastructure, with 60+ sessions and hands-on workshops; paid ticket.",
+    tags: ["Backend/Cloud", "AI", "Software Engineering"],
+    url: "https://www.containerdays.io/containerdays-singapore-2026/"
+  },
+  {
+    date: "2026-10-28",
+    display: "Oct 28",
+    name: "AI Wednesdays: The One About Robots Beyond the Lab",
+    venue: "Lorong AI, one-north, 69 Ayer Rajah Crescent",
+    time: "3:00–5:00 PM SGT",
+    format: "In person",
+    description: "Run with IMDA: NTU's Soujanya Poria and others on generalist robot control models, translating perception into action, and the infrastructure robots need outside the lab.",
+    tags: ["AI"],
+    url: "https://luma.com/q3lcmn8i"
+  },
+  {
+    date: "2026-10-28",
+    display: "Oct 28",
+    name: "AWS User Group Meetup October 2026",
+    venue: "AWS Singapore, 2 Central Boulevard, IOI Central Boulevard East Towers Level 5",
+    time: "6:30 PM SGT",
+    format: "In person",
+    description: "Monthly AWS community evening of practitioner talks on building and running workloads on AWS; session lineup announced closer to the date.",
+    tags: ["Backend/Cloud"],
+    url: "https://www.meetup.com/aws-sg/events/316763609/"
+  },
+  {
+    date: "2026-10-29",
+    display: "Oct 29",
+    name: "SG Agentic Nights: Hands-on Labs with Docker",
+    venue: "UBS, 9 Penang Road",
+    time: "4:00–7:30 PM SGT",
+    format: "In person",
+    description: "UBS, Docker and Microsoft on OpenClaw and its security surface, a hands-on lab on governing agentic applications, and Foundry IQ for enterprise retrieval beyond RAG.",
+    tags: ["AI", "Backend/Cloud"],
+    url: "https://globalai.community/e/rjlhdm80"
+  },
+  {
+    date: "2026-10-31",
+    display: "Oct 31",
+    name: "JuniorDevSG Developer's Gym: Coding Dojo",
+    venue: "HackerspaceSG, Textile Centre, 200 Jalan Sultan",
+    time: "2:00 PM SGT",
+    format: "In person",
+    description: "Pair-programming kata session: pick a problem, work through it in pairs, then review the solutions as a group.",
+    tags: ["Software Engineering"],
+    url: "https://www.meetup.com/junior-developers-singapore/events/316138147/"
+  },
+  {
+    date: "2026-11-04",
+    display: "Nov 4–5",
+    name: "STACK Conference 2026",
+    venue: "Sands Expo & Convention Centre, Marina Bay Sands",
+    time: "",
+    format: "In person",
+    description: "GovTech's developer conference: AI autonomy, engineering productivity, sustainable cloud and digital safety, with an optional workshop day on Nov 3; paid ticket.",
+    tags: ["Software Engineering", "AI", "Backend/Cloud"],
+    url: "https://www.sginnovate.com/event/stack-conference-2026"
+  },
+  {
+    date: "2026-11-04",
+    display: "Nov 4",
+    name: "Mindstone Singapore November AI Meetup",
+    venue: "EHL Campus Singapore",
+    time: "6:30–9:00 PM SGT",
+    format: "In person",
+    description: "Three talks per the Mindstone format: lessons from building a product on LLMs, a practical AI workflow demo, and a wider look at where the technology is heading.",
+    tags: ["AI"],
+    url: "https://luma.com/xyov82ta"
+  },
+  {
+    date: "2026-11-04",
+    display: "Nov 4",
+    name: "PL & Compilers Meetup",
+    venue: "The Coffee Bean & Tea Leaf, International Plaza, 10 Anson Road",
+    time: "7:30 PM SGT",
+    format: "In person",
+    description: "Fortnightly compiler engineering session: language design, VMs, code generation and hardware architecture.",
+    tags: ["Software Engineering"],
+    url: "https://www.meetup.com/singapore-compiler-engineering-group/events/vpztztyjcpbgb/"
+  },
+  {
+    date: "2026-11-05",
+    display: "Nov 5",
+    name: "AgentCon Singapore",
+    venue: "Singapore University of Technology and Design, 8 Somapah Road",
+    time: "8:30 AM–5:00 PM SGT",
+    format: "In person",
+    description: "Singapore leg of the AI Agents World Tour: deep-dive talks, workshops on building and scaling agents, and open-source framework demos.",
+    tags: ["AI", "Software Engineering"],
+    url: "https://globalai.community/e/awgteae7"
+  },
+  {
+    date: "2026-11-10",
+    display: "Nov 10",
+    name: "AWS Security User Group Meetup",
+    venue: "AWS Singapore, 2 Central Boulevard, IOI Central Boulevard East Towers Level 5",
+    time: "6:30–9:00 PM SGT",
+    format: "In person",
+    description: "Joint AWS User Group and AWS Security User Group evening: 30-minute interactive sessions on IaC guardrails, identity, data protection and incident learnings.",
+    tags: ["Backend/Cloud"],
+    url: "https://www.meetup.com/aws-sg-security/events/316651408/"
+  },
+  {
+    date: "2026-11-18",
+    display: "Nov 18–20",
+    name: "ACM Symposium on Cloud Computing (SoCC '26)",
+    venue: "Singapore (venue to be announced)",
+    time: "",
+    format: "In person",
+    description: "ACM's cloud computing research conference, co-sponsored by SIGMOD and SIGOPS: distributed systems, storage and large-scale infrastructure papers.",
+    tags: ["Backend/Cloud", "Data"],
+    url: "https://acmsocc.org/2026/"
+  },
+  {
+    date: "2026-11-18",
+    display: "Nov 18",
+    name: "AWS User Group Meetup November 2026",
+    venue: "AWS Singapore, 2 Central Boulevard, IOI Central Boulevard East Towers Level 5",
+    time: "6:30 PM SGT",
+    format: "In person",
+    description: "Monthly AWS community meetup at the AWS office; talk lineup confirmed nearer the date.",
+    tags: ["Backend/Cloud"],
+    url: "https://www.meetup.com/aws-sg/events/316829731/"
+  },
+  {
+    date: "2026-11-18",
+    display: "Nov 18",
+    name: "PL & Compilers Meetup",
+    venue: "The Coffee Bean & Tea Leaf, International Plaza, 10 Anson Road",
+    time: "7:30 PM SGT",
+    format: "In person",
+    description: "Fortnightly session on programming languages and compilers; topic decided by the participants on the night.",
+    tags: ["Software Engineering"],
+    url: "https://www.meetup.com/singapore-compiler-engineering-group/events/vpztztyjcpbxb/"
+  },
+  {
+    date: "2026-11-28",
+    display: "Nov 28",
+    name: "DevFest Singapore 2026: Prototyping from Scratch",
+    venue: "Google Developer Space, 80 Pasir Panjang Road",
+    time: "1:30–6:00 PM SGT",
+    format: "In person",
+    description: "GDG Singapore's annual conference; this afternoon track is hands-on prototyping with Google Cloud and GenAI tooling.",
+    tags: ["AI", "Software Engineering", "Backend/Cloud"],
+    url: "https://luma.com/gdgsg-devfest26"
+  }
+];
+const GROUPS = [
+  { name: "AI Tinkerers Singapore", note: "Demo nights for people shipping AI", url: "https://singapore.aitinkerers.org/" },
+  { name: "Global AI Singapore", note: "Azure, AI Foundry, agents; runs AgentCon", url: "https://globalai.community/chapters/singapore" },
+  { name: "AWS User Group Singapore", note: "Runs AWS Community Day", url: "https://www.meetup.com/aws-sg/" },
+  { name: "Cloud Native Singapore", note: "CNCF chapter: Kubernetes and platform", url: "https://ocgroups.dev/cncf/group/v58wadq" },
+  { name: "DevOps Singapore", note: "Delivery, platform and SRE practice", url: "https://luma.com/devops-singapore" },
+  { name: "SingaporeJS", note: "JavaScript, Node and the modern web", url: "https://www.meetup.com/singapore-js/" },
+  { name: "ReactJS Singapore", note: "React and React Native", url: "https://www.meetup.com/react-singapore/" },
+  { name: "GoSG", note: "Go in production and side projects", url: "https://www.meetup.com/golangsg/" },
+  { name: "Rust Singapore", note: "Rust language and tooling", url: "https://www.meetup.com/rust-singapore/" },
+  { name: ".NET Developers SG", note: "C# and the .NET ecosystem", url: "https://www.meetup.com/net-developers-sg/" },
+  { name: "SingaDev", note: "Polyglot engineers, formerly SingaJUG", url: "https://www.meetup.com/singadev/" },
+  { name: "KSUG.AI APAC", note: "Kotlin and AI in the APAC region", url: "https://www.meetup.com/ksug-sg/" },
+  { name: "PyData Singapore", note: "Python for data and analytics", url: "https://www.meetup.com/pydata-sg/" },
+  { name: "Python User Group Singapore", note: "PUGS: general Python community", url: "https://pugs.org.sg/" },
+  { name: "Singapore Data & AI Engineering", note: "Pipelines, warehouses, ML platform", url: "https://www.meetup.com/singapore-data-engineering-meetup/" },
+  { name: "Data Engineering Singapore", note: "Pipelines and data infrastructure", url: "https://www.meetup.com/data-engineering-sg/" },
+  { name: "Machine Learning Singapore", note: "Applied ML and research talks", url: "https://www.meetup.com/machine-learning-singapore/" },
+  { name: "Singapore AI Developers Group", note: "GenAI, LLMs, agents, MLOps", url: "https://www.meetup.com/singapore-ai-developers-group/" },
+  { name: "Singapore AI ML & Computer Vision", note: "Vision models and applied ML", url: "https://www.meetup.com/singapore-computer-vision-meetup/" },
+  { name: "Women Devs SG", note: "Talks and workshops for women in tech", url: "https://www.meetup.com/women-devs-sg/" },
+  { name: "Junior Developers Singapore", note: "Early-career friendly sessions", url: "https://www.meetup.com/junior-developers-singapore/" },
+  { name: "FOSSASIA Singapore", note: "Open source and open technology", url: "https://www.meetup.com/fossasia-singapore-open-technology-meetup/" },
+  { name: "GDG Singapore", note: "Google technologies; runs DevFest", url: "https://gdg.community.dev/gdg-singapore/" },
+  { name: "Tech Talks by Thoughtworks", note: "Engineering practice talks; runs XConf APAC", url: "https://www.meetup.com/tech-talks-thoughtworks-singapore/" },
+  { name: "NUS Hackers", note: "Weekly Friday Hacks talks, open to all", url: "https://www.nushackers.org/" },
+  { name: "Lorong AI", note: "After Dark demo nights at one-north", url: "https://lorong.ai/" },
+  { name: "SGInnovate", note: "Deep-tech talks and Roast My TechStack", url: "https://www.sginnovate.com/events" },
+  { name: "Singapore Gov Developer Portal", note: "STACK conference and meetups", url: "https://www.developer.tech.gov.sg/communities/events/" }
+];
+
+const TOPICS = ["AI", "Software Engineering", "Frontend", "Backend/Cloud", "Data"];
+const FORMATS = ["In person", "Online"];
+const MONTHS = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"];
+
+let topic = "All";
+let format = "All";
+
+function chip(label, group, isActive) {
+  const b = document.createElement("button");
+  b.className = "chip";
+  b.type = "button";
+  b.textContent = label;
+  b.setAttribute("aria-pressed", String(isActive));
+  b.addEventListener("click", () => {
+    if (group === "topic") topic = label; else format = label;
+    render();
+  });
+  return b;
+}
+
+function buildChips() {
+  const t = document.getElementById("topics");
+  const f = document.getElementById("formats");
+  t.querySelectorAll(".chip").forEach(n => n.remove());
+  f.querySelectorAll(".chip").forEach(n => n.remove());
+  ["All", ...TOPICS].forEach(l => t.appendChild(chip(l, "topic", topic === l)));
+  ["All", ...FORMATS].forEach(l => f.appendChild(chip(l, "format", format === l)));
+}
+
+function monthKey(iso) {
+  const [y, m] = iso.split("-");
+  return MONTHS[Number(m) - 1] + " " + y;
+}
+
+function render() {
+  buildChips();
+  const list = document.getElementById("list");
+  const count = document.getElementById("count");
+  list.textContent = "";
+
+  const shown = EVENTS
+    .filter(e => topic === "All" || e.tags.includes(topic))
+    .filter(e => format === "All" || e.format === format)
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  count.textContent = shown.length === EVENTS.length
+    ? shown.length + " events"
+    : shown.length + " of " + EVENTS.length + " events";
+
+  if (!shown.length) {
+    const p = document.createElement("p");
+    p.className = "empty";
+    p.textContent = "Nothing matches that combination. Try widening the filters.";
+    list.appendChild(p);
+    return;
+  }
+
+  let current = "";
+  for (const e of shown) {
+    const key = monthKey(e.date);
+    if (key !== current) {
+      current = key;
+      const h = document.createElement("h2");
+      h.className = "month";
+      h.textContent = key;
+      list.appendChild(h);
+    }
+
+    const card = document.createElement("article");
+    card.className = "event";
+
+    const top = document.createElement("div");
+    top.className = "event-top";
+    const d = document.createElement("span");
+    d.className = "date";
+    d.textContent = e.display;
+    const h3 = document.createElement("h3");
+    const a = document.createElement("a");
+    a.href = e.url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.textContent = e.name;
+    h3.appendChild(a);
+    top.append(d, h3);
+
+    const meta = document.createElement("p");
+    meta.className = "meta";
+    const fmt = document.createElement("span");
+    fmt.className = "fmt";
+    fmt.textContent = e.format;
+    meta.appendChild(fmt);
+    const rest = [e.venue, e.time].filter(Boolean).join(" · ");
+    if (rest) meta.appendChild(document.createTextNode(" · " + rest));
+
+    const desc = document.createElement("p");
+    desc.className = "desc";
+    desc.textContent = e.description;
+
+    const tags = document.createElement("div");
+    tags.className = "tags";
+    for (const t of e.tags) {
+      const s = document.createElement("span");
+      s.className = "tag";
+      s.textContent = t;
+      tags.appendChild(s);
+    }
+
+    card.append(top, meta, desc, tags);
+    list.appendChild(card);
+  }
+}
+
+function renderGroups() {
+  const g = document.getElementById("groups");
+  for (const item of GROUPS) {
+    const a = document.createElement("a");
+    a.className = "group";
+    a.href = item.url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    const b = document.createElement("b");
+    b.textContent = item.name;
+    const s = document.createElement("span");
+    s.textContent = item.note;
+    a.append(b, s);
+    g.appendChild(a);
+  }
+}
+
+function systemTheme() {
+  return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function syncThemeToggle(theme) {
+  const btn = document.getElementById("themeToggle");
+  btn.dataset.active = theme;
+  btn.setAttribute("aria-pressed", String(theme === "dark"));
+  btn.setAttribute("aria-label", theme === "dark" ? "Switch to light theme" : "Switch to dark theme");
+}
+
+function initTheme() {
+  const btn = document.getElementById("themeToggle");
+  syncThemeToggle(document.documentElement.dataset.theme || systemTheme());
+
+  btn.addEventListener("click", () => {
+    const next = btn.dataset.active === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem("theme", next);
+    syncThemeToggle(next);
+  });
+
+  // Live-follow the system theme for as long as the visitor hasn't picked one.
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    if (!localStorage.getItem("theme")) syncThemeToggle(systemTheme());
+  });
+}
+
+render();
+renderGroups();
+initTheme();
+</script>
+</body>
+</html>
