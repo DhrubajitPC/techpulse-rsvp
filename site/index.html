@@ -237,7 +237,7 @@
   <p class="sub">
     Meetups and conferences for AI, software engineering, frontend, backend, cloud and data —
     in Singapore or joinable from SGT. Last updated
-    <b><span id="updated" data-updated="2026-11-09">9 November 2026</span></b>.
+    <b><span id="updated" data-updated="2026-11-16">16 November 2026</span></b>.
     Covers the next eight weeks, plus larger conferences later in the year.
   </p>
 </header>
@@ -293,151 +293,19 @@
 <script>
 const EVENTS = [
   {
-    date: "2026-11-10",
-    display: "Nov 10",
-    name: "AI Tinkerers Singapore x ElevenLabs: Build Voice AI & Creative Agents",
-    venue: "Grab HQ, 3 Media Close, one-north",
-    time: "5:30–9:00 PM SGT",
-    format: "In person",
-    description: "Guided build-along: take a voice agent from idea to working prototype on ElevenLabs in one evening. Bring a laptop and headphones.",
-    tags: ["AI", "Software Engineering"],
-    url: "https://singapore.aitinkerers.org/p/ai-tinkerers-singapore-x-elevenlabs-build-voice-ai-creative-agents"
-  },
-  {
-    date: "2026-11-10",
-    display: "Nov 10",
-    name: "AWS Security User Group Singapore: November 2026",
-    venue: "AWS Singapore, 2 Central Boulevard, IOI Central Boulevard Towers Level 5",
-    time: "6:30–9:00 PM SGT",
-    format: "In person",
-    description: "Two tracks: community security talks, and a level 300 workshop on building and securing AI agents with Amazon Bedrock AgentCore. Registration has moved to Luma.",
-    tags: ["Backend/Cloud", "AI"],
-    url: "https://www.meetup.com/aws-sg-security/events/316651408/"
-  },
-  {
-    date: "2026-11-11",
-    display: "Nov 11",
-    name: "Lorong AI: The One About Jailbreaks & Kill Switches",
-    venue: "Lorong AI, 69 Ayer Rajah Crescent, Vidacity Building Level 3",
-    time: "3:00–5:00 PM SGT",
-    format: "In person",
-    description: "GovTech on red-teaming chat.gov.sg with adversarial agents, and Salesforce on gating agent access to tools through a shared policy and quarantine layer.",
-    tags: ["AI", "Software Engineering"],
-    url: "https://luma.com/gmwe6kzp"
-  },
-  {
-    date: "2026-11-11",
-    display: "Nov 11",
-    name: "KSUG.AI: Agentic Engineering & Security",
-    venue: "Online",
-    time: "3:00–5:00 PM SGT",
-    format: "Online",
-    description: "Two talks: building a bill of materials for agentic engineering, and hunting runtime threats from containers that should not exist in a Kubernetes cluster.",
-    tags: ["Backend/Cloud", "AI"],
-    url: "https://www.meetup.com/ksug-sg/events/317337823/"
-  },
-  {
-    date: "2026-11-11",
-    display: "Nov 11",
-    name: "Claude × SlackForce × AWS Meetup #13",
-    venue: "Singapore, Downtown Core (address sent on registration)",
-    time: "6:00–9:00 PM SGT",
-    format: "In person",
-    description: "Keynotes from Salesforce and AWS on putting Claude agents into the tools and infrastructure teams already run, plus demos from Singapore builders. Currently waitlisted.",
-    tags: ["AI", "Backend/Cloud"],
-    url: "https://luma.com/claude-myn7"
-  },
-  {
-    date: "2026-11-12",
-    display: "Nov 12",
-    name: "Security by Design: Ship Fast Without Shipping Holes",
-    venue: "Lorong AI, one-north, 69 Ayer Rajah Crescent",
-    time: "10:00 AM–12:00 PM SGT",
-    format: "In person",
-    description: "Breakfast huddle on threat modelling early-stage products, secure-by-default architecture, and secrets and access management while still shipping quickly.",
-    tags: ["Software Engineering", "Backend/Cloud"],
-    url: "https://www.sginnovate.com/event/security-design-ship-fast-without-shipping-holes-breakfast-huddle"
-  },
-  {
-    date: "2026-11-13",
-    display: "Nov 13",
-    name: "Robot Agentic Programming: Back into the Future",
-    venue: "Lorong AI, 69 Ayer Rajah Crescent, Vidacity Building Level 3",
-    time: "3:00–5:00 PM SGT",
-    format: "In person",
-    description: "NUS professor David Hsu on what coding agents mean for robotics: program representations, execution environments, and combining model-based planning with learned policies.",
-    tags: ["AI", "Software Engineering"],
-    url: "https://luma.com/d2w3yewr"
-  },
-  {
-    date: "2026-11-13",
-    display: "Nov 13",
-    name: "JuniorDevSG – Code & Tell November 2026",
-    venue: "PayPal Singapore, 5 Temasek Boulevard, #09-01 Suntec Tower Five",
-    time: "7:00–9:00 PM SGT",
-    format: "In person",
-    description: "Show-and-tell night: members demo side projects and work in progress, then take questions from the room.",
-    tags: ["Software Engineering"],
-    url: "https://www.meetup.com/junior-developers-singapore/events/317131441/"
-  },
-  {
-    date: "2026-11-13",
-    display: "Nov 13",
-    name: "NUS Hackers Friday Hacks #306",
-    venue: "NUS (venue to be announced)",
-    time: "7:00 PM SGT",
-    format: "In person",
-    description: "Weekly student-run talk night open to the public; venue and speaker announced closer to the date. The last Friday Hacks of the semester.",
-    tags: ["Software Engineering"],
-    url: "https://www.nushackers.org/"
-  },
-  {
-    date: "2026-11-14",
-    display: "Nov 14",
-    name: "Div0 SHELLGym: Linux Forensics",
-    venue: "NUS Enterprise, 21 Heng Mui Keng Terrace, i3 Building",
-    time: "2:00–6:00 PM SGT",
-    format: "In person",
-    description: "Hands-on session on Linux logs and system artefacts: what cron, SSH and config changes leave behind, and triaging a host where an attacker has tampered with the logs.",
-    tags: ["Backend/Cloud", "Software Engineering"],
-    url: "https://luma.com/reee00oz"
-  },
-  {
-    date: "2026-11-14",
-    display: "Nov 14",
-    name: "JuniorDevSG Developer's Gym: LeetCode Practice",
-    venue: "HackerspaceSG, Textile Centre, 200 Jalan Sultan, #08-10",
-    time: "2:00–5:00 PM SGT",
-    format: "In person",
-    description: "Social coding afternoon: one volunteer works a LeetCode problem on screen while the group plays interviewer or collaborator. Bring a laptop.",
-    tags: ["Software Engineering"],
-    url: "https://www.meetup.com/junior-developers-singapore/events/317143659/"
-  },
-  {
-    date: "2026-11-14",
-    display: "Nov 14–15",
-    name: "NASA Space Apps Challenge Singapore 2026",
-    venue: "Online",
-    time: "From 9:00 AM SGT",
-    format: "Online",
-    description: "Singapore edition of NASA's international hackathon, run virtually: two days building software against NASA open datasets.",
-    tags: ["Software Engineering", "Data"],
-    url: "https://www.meetup.com/nasa-space-apps-singapore/events/316528437/"
-  },
-  {
     date: "2026-11-16",
     display: "Nov 16",
     name: "PyData Singapore: Drug Discovery with Open-Source Tools",
     venue: "The Meeting Point, 73B Ayer Rajah Crescent",
-    time: "6:00–8:00 PM SGT",
+    time: "6:00\u20138:00 PM SGT",
     format: "In person",
-    description: "Practitioners on the open-source stack behind computational drug discovery: ML for compound screening, generative chemistry, and reproducible pipelines over open datasets.",
+    description: "The open-source stack behind computational drug discovery: ML for compound screening, generative chemistry, and reproducible pipelines over open datasets.",
     tags: ["Data", "AI"],
     url: "https://www.meetup.com/pydata-sg/events/316162883/"
   },
   {
     date: "2026-11-18",
-    display: "Nov 18–20",
+    display: "Nov 18\u201320",
     name: "ACM Symposium on Cloud Computing (SoCC '26)",
     venue: "Singapore (venue per conference site)",
     time: "",
@@ -451,7 +319,7 @@ const EVENTS = [
     display: "Nov 18",
     name: "AWS User Group Meetup November 2026",
     venue: "AWS Singapore, 2 Central Boulevard, IOI Central Boulevard Towers Level 5",
-    time: "7:00–9:00 PM SGT",
+    time: "7:00\u20139:00 PM SGT",
     format: "In person",
     description: "Evolving an AWS landing zone for multi-account EKS at Sygnum Bank, then a live build of an Express and React app on Lambda Web Functions.",
     tags: ["Backend/Cloud", "Software Engineering"],
@@ -462,53 +330,53 @@ const EVENTS = [
     display: "Nov 18",
     name: "The Agentic Shift in Finance",
     venue: "Kada, 5 Kadayanallur Street",
-    time: "7:00–9:00 PM SGT",
+    time: "6:30\u20138:30 PM SGT",
     format: "In person",
     description: "Where AI agents are genuinely in production across banks, fintechs and payments, what breaks moving from pilot to production, and what stays with a person.",
     tags: ["AI"],
     url: "https://www.meetup.com/the-agentic-ai-club/events/317177319/"
   },
   {
-    date: "2026-11-18",
-    display: "Nov 18",
-    name: "PL & Compilers Meetup",
-    venue: "The Coffee Bean & Tea Leaf, International Plaza, 10 Anson Road",
-    time: "7:30–9:00 PM SGT",
-    format: "In person",
-    description: "Fortnightly session on programming languages and compilers; agenda set by the participants on the night.",
-    tags: ["Software Engineering"],
-    url: "https://www.meetup.com/singapore-compiler-engineering-group/events/317340290/"
-  },
-  {
     date: "2026-11-19",
     display: "Nov 19",
     name: "Data Engineering Singapore x Confluent x IMDA",
     venue: "IMDA, 10 Pasir Panjang Road",
-    time: "6:30–9:00 PM SGT",
+    time: "6:30\u20139:00 PM SGT",
     format: "In person",
     description: "Metrics-driven Kafka producer tuning, live, then a payment-risk demo of a Kafka, Flink and Fluss streamhouse feeding AI agents fresh state.",
     tags: ["Data", "Backend/Cloud"],
     url: "https://www.meetup.com/data-engineering-sg/events/317251511/"
   },
   {
+    date: "2026-11-20",
+    display: "Nov 20",
+    name: "Codex Community Meetup \u2013 Singapore",
+    venue: "Singapore (address sent on registration)",
+    time: "6:00\u201310:00 PM SGT",
+    format: "In person",
+    description: "Monthly community night on OpenAI's Codex coding agent: product updates, member demos of shipped workflows, and open discussion of what is and is not working.",
+    tags: ["AI", "Software Engineering"],
+    url: "https://luma.com/codexsg-nov20"
+  },
+  {
     date: "2026-11-24",
     display: "Nov 24",
     name: "SG Agentic Nights: November",
-    venue: "Singapore (venue sent on registration)",
-    time: "6:00–9:00 PM SGT",
+    venue: "Cr\u00e9dit Agricole CIB, Mapletree Business City Block 20, 20 West Pasir Panjang Road",
+    time: "6:00\u20139:00 PM SGT",
     format: "In person",
-    description: "Global AI Singapore's monthly agent engineering evening; the session lineup is published on the chapter event page.",
+    description: "Global AI Singapore's monthly agent evening: the two-tier decision and reasoning AI stack, recursive self-improving agentic harnesses, and a demo of coordinating AI tools.",
     tags: ["AI", "Software Engineering"],
     url: "https://globalai.community/e/xirlve2e"
   },
   {
-    date: "2026-11-25",
-    display: "Nov 25",
+    date: "2026-11-26",
+    display: "Nov 26",
     name: "KSUG.AI Singapore #50: Cloud Native & AI Meetup",
-    venue: "Elastic, 138 Market Street, #05-12",
-    time: "6:00–9:00 PM SGT",
+    venue: "IMDA, 10 Pasir Panjang Road, Mapletree Business City #03-01",
+    time: "6:00\u20139:00 PM SGT",
     format: "In person",
-    description: "Fiftieth edition of the Kubernetes and AI user group's cloud-native evening, hosted at Elastic; talk lineup published on the group page.",
+    description: "Fiftieth edition of the Kubernetes and AI user group's cloud-native evening, run hybrid from IMDA; talk lineup published on the group page.",
     tags: ["Backend/Cloud", "AI"],
     url: "https://www.meetup.com/ksug-sg/events/317071246/"
   },
@@ -517,9 +385,9 @@ const EVENTS = [
     display: "Nov 26",
     name: "See What Your Agent Did: Trace it. Debug it. Ship it.",
     venue: "Singapore (venue sent on registration)",
-    time: "6:00–8:30 PM SGT",
+    time: "6:00\u20138:30 PM SGT",
     format: "In person",
-    description: "ClickHouse and WebStoating on tracing agent workflows end to end with Langfuse, and giving an agent a database it can actually query.",
+    description: "ClickHouse on tracing agent workflows end to end and on giving an agent a database it can actually query, with live demos and production debugging patterns.",
     tags: ["AI", "Data"],
     url: "https://www.meetup.com/clickhouse-singapore-meetup-group/events/317203956/"
   },
@@ -528,9 +396,9 @@ const EVENTS = [
     display: "Nov 28",
     name: "DevFest Singapore 2026: Architecting for the Agentic Era",
     venue: "Google Developer Space, 80 Pasir Panjang Road",
-    time: "9:00 AM–12:30 PM SGT",
+    time: "9:00 AM\u201312:30 PM SGT",
     format: "In person",
-    description: "Morning track of GDG Singapore's annual conference: multi-agent system design, runtime guardrails and evals, governance, and what breaks at scale.",
+    description: "Morning track of GDG Singapore's annual conference: multi-agent system design, runtime guardrails and evals, governance, and what breaks at scale. Registration is full; walk-ins subject to capacity.",
     tags: ["AI", "Software Engineering", "Backend/Cloud"],
     url: "https://luma.com/gdgsg-devfest26-am"
   },
@@ -539,31 +407,20 @@ const EVENTS = [
     display: "Nov 28",
     name: "DevFest Singapore 2026: Prototyping from Scratch",
     venue: "Google Developer Space, 80 Pasir Panjang Road",
-    time: "1:30–6:00 PM SGT",
+    time: "1:30\u20136:00 PM SGT",
     format: "In person",
-    description: "Afternoon track of GDG Singapore's annual conference: hands-on prototyping with Google Cloud and GenAI tooling.",
+    description: "Afternoon track of GDG Singapore's annual conference: rapid prototyping patterns, running local models, and lightweight agents. Registration is full; walk-ins subject to capacity.",
     tags: ["AI", "Software Engineering", "Backend/Cloud"],
     url: "https://luma.com/gdgsg-devfest26-pm"
-  },
-  {
-    date: "2026-11-28",
-    display: "Nov 28",
-    name: "JuniorDevSG Developer's Gym: Coding Dojo",
-    venue: "HackerspaceSG, Textile Centre, 200 Jalan Sultan, #08-10",
-    time: "2:00–5:00 PM SGT",
-    format: "In person",
-    description: "Pair-programming dojo: the group works one problem together, rotating the keyboard. Bring a laptop.",
-    tags: ["Software Engineering"],
-    url: "https://www.meetup.com/junior-developers-singapore/events/317143703/"
   },
   {
     date: "2026-12-02",
     display: "Dec 2",
     name: "Mindstone Singapore December AI Meetup",
     venue: "EHL Campus Singapore, 3 Lady Hill Road",
-    time: "6:30–9:00 PM SGT",
+    time: "6:30\u20139:00 PM SGT",
     format: "In person",
-    description: "Monthly practical AI evening: building with LLMs, an applied productivity demo, and a wider look at where the technology is heading.",
+    description: "Monthly practical AI evening: a technical demo of building a product with LLMs, an applied productivity walkthrough, and a wider look at where the technology is heading.",
     tags: ["AI"],
     url: "https://www.meetup.com/mindstone-singapore-ai-meetup/events/317101011/"
   },
@@ -572,20 +429,42 @@ const EVENTS = [
     display: "Dec 2",
     name: "PL & Compilers Meetup",
     venue: "The Coffee Bean & Tea Leaf, International Plaza, 10 Anson Road",
-    time: "7:30–9:00 PM SGT",
+    time: "7:30\u20139:00 PM SGT",
     format: "In person",
-    description: "Fortnightly programming-languages and compilers session covering language design, static analysis and low-level systems.",
+    description: "Fortnightly session on language design, static analysis, VMs and code generation; the topic is set by the participants on the night.",
     tags: ["Software Engineering"],
     url: "https://www.meetup.com/singapore-compiler-engineering-group/events/vpztztyjcqbdb/"
   },
   {
+    date: "2026-12-03",
+    display: "Dec 3",
+    name: "AI Tinkerers Singapore: Live Demos with Supabase and Temus",
+    venue: "Singapore (venue shared with accepted attendees)",
+    time: "5:30\u20138:30 PM SGT",
+    format: "In person",
+    description: "Supabase on Postgres, pgvector, row-level security and edge functions for AI apps, a Temus build with OpenAI Codex, then five-minute community demos.",
+    tags: ["AI", "Software Engineering"],
+    url: "https://singapore.aitinkerers.org/p/ai-tinkerers-singapore-live-demos-with-supabase-and-temus"
+  },
+  {
+    date: "2026-12-05",
+    display: "Dec 5",
+    name: "JustBuildLah with Gemini 4 for Everyone",
+    venue: "Google Singapore (address sent on registration)",
+    time: "8:30 AM\u20136:30 PM SGT",
+    format: "In person",
+    description: "Full-day build event on Gemini 4 with separate developer and prompt-builder tracks: expert talks, hands-on hacking with mentors, and judged submissions.",
+    tags: ["AI", "Software Engineering"],
+    url: "https://luma.com/6k3jow8e"
+  },
+  {
     date: "2026-12-09",
-    display: "Dec 9–11",
+    display: "Dec 9\u201310",
     name: "PyData Global 2026",
     venue: "Online",
-    time: "From 7:00 PM SGT",
+    time: "",
     format: "Online",
-    description: "Virtual PyData conference: keynotes, talks and lightning talks across the Python data and ML stack; paid ticket.",
+    description: "Two-day virtual PyData conference for data scientists, data engineers and tool developers: keynotes, talks and lightning talks, scheduled anywhere on Earth.",
     tags: ["Data", "AI"],
     url: "https://pydata.org/global2026"
   },
@@ -594,22 +473,44 @@ const EVENTS = [
     display: "Dec 12",
     name: "JuniorDevSG Developer's Gym: LeetCode Practice",
     venue: "HackerspaceSG, Textile Centre, 200 Jalan Sultan, #08-10",
-    time: "2:00–5:00 PM SGT",
+    time: "2:00\u20135:00 PM SGT",
     format: "In person",
-    description: "Fortnightly practice afternoon: one person works a LeetCode problem on screen while the room acts as interviewer or pair.",
+    description: "Monthly practice afternoon: one person works a LeetCode problem on screen while the room acts as interviewer or pair. Bring a laptop.",
     tags: ["Software Engineering"],
     url: "https://www.meetup.com/junior-developers-singapore/events/317281861/"
+  },
+  {
+    date: "2026-12-16",
+    display: "Dec 16",
+    name: "Hermes AI Agent Night: OpenBuilder & AWS",
+    venue: "Singapore (address sent on registration)",
+    time: "6:00\u20139:00 PM SGT",
+    format: "In person",
+    description: "Live demos of Hermes agents running real workflows on AWS, a walkthrough of agent orchestration and deployment, and discussion of production-grade rollout.",
+    tags: ["AI", "Backend/Cloud"],
+    url: "https://luma.com/3ytnlt4r"
   },
   {
     date: "2026-12-26",
     display: "Dec 26",
     name: "JuniorDevSG Developer's Gym: Coding Dojo",
     venue: "HackerspaceSG, Textile Centre, 200 Jalan Sultan, #08-10",
-    time: "2:00–5:00 PM SGT",
+    time: "2:00\u20135:00 PM SGT",
     format: "In person",
     description: "Pair-programming dojo over the holiday week: one problem, worked together, keyboard rotating around the room.",
     tags: ["Software Engineering"],
     url: "https://www.meetup.com/junior-developers-singapore/events/317281865/"
+  },
+  {
+    date: "2027-04-15",
+    display: "Apr 15 & 19",
+    name: "React Summit Asia 2027",
+    venue: "Singapore (venue per conference site)",
+    time: "",
+    format: "In person",
+    description: "First Asian edition of React Summit, hybrid from Singapore: React and full-stack tracks plus an AI.js track on agents, RAG, evals and local LLM inference for JS/TS developers.",
+    tags: ["Frontend", "Software Engineering", "AI"],
+    url: "https://reactsummit.asia/"
   }
 ];
 const GROUPS = [
